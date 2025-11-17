@@ -41,6 +41,8 @@ EMAIL_USER=myemail@example.com
 EMAIL_PASS=myemailpassword
 EMAIL_FROM=myemail@example.com
 
+After adding the above .env
+run the docker compose up --build it will run perfectly
 
 
 
