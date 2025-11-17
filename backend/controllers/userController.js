@@ -31,6 +31,8 @@ const loginUser = async (req, res, next) => {
 
     generateToken(req, res, user._id);
 
+    console.log('JWT cookie should be set now.');
+
     res.status(200).json({
       message: 'Login successful.',
       userId: user._id,

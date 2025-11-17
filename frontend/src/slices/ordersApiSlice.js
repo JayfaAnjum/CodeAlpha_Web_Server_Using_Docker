@@ -7,50 +7,57 @@ export const ordersApiSlice = apiSlice.injectEndpoints({
       query: order => ({
         url: ORDERS_URL,
         method: 'POST',
-        body: { ...order }
+        body: { ...order },
+        credentials: 'include', // ✅ send JWT cookie
       }),
-      invalidatesTags: ['Order']
+      invalidatesTags: ['Order'],
     }),
     getOrderDetails: builder.query({
       query: orderId => ({
-        url: `${ORDERS_URL}/${orderId}`
+        url: `${ORDERS_URL}/${orderId}`,
+        credentials: 'include', // ✅ send JWT cookie
       }),
-      providesTags: ['Order']
+      providesTags: ['Order'],
     }),
     getMyOrders: builder.query({
       query: () => ({
-        url: `${ORDERS_URL}/my-orders`
+        url: `${ORDERS_URL}/my-orders`,
+        credentials: 'include', // ✅ send JWT cookie
       }),
-      providesTags: ['Order']
+      providesTags: ['Order'],
     }),
     payOrder: builder.mutation({
       query: ({ orderId, details }) => ({
         url: `${ORDERS_URL}/${orderId}/pay`,
         method: 'PUT',
-        body: { ...details }
+        body: { ...details },
+        credentials: 'include', // ✅ send JWT cookie
       }),
-      invalidatesTags: ['Order']
+      invalidatesTags: ['Order'],
     }),
     updateDeliver: builder.mutation({
       query: orderId => ({
         url: `${ORDERS_URL}/${orderId}/deliver`,
-        method: 'PUT'
+        method: 'PUT',
+        credentials: 'include', // ✅ send JWT cookie
       }),
-      invalidatesTags: ['Order']
+      invalidatesTags: ['Order'],
     }),
     getRazorpayApiKey: builder.query({
       query: () => ({
-        url: `${RAZORPAY_URL}/razorpay/config`
+        url: `${RAZORPAY_URL}/razorpay/config`,
+        credentials: 'include', // ✅ send JWT cookie
       }),
-      providesTags: ['Order']
+      providesTags: ['Order'],
     }),
     getOrders: builder.query({
       query: () => ({
-        url: ORDERS_URL
+        url: ORDERS_URL,
+        credentials: 'include', // ✅ send JWT cookie
       }),
-      providesTags: ['Order']
-    })
-  })
+      providesTags: ['Order'],
+    }),
+  }),
 });
 
 export const {
@@ -60,5 +67,5 @@ export const {
   useUpdateDeliverMutation,
   useGetRazorpayApiKeyQuery,
   useGetMyOrdersQuery,
-  useGetOrdersQuery
+  useGetOrdersQuery,
 } = ordersApiSlice;

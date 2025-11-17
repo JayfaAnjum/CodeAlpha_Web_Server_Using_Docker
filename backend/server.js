@@ -21,23 +21,14 @@ connectDB();
 
 const app = express();
 
-app.use(cors(
-
-
-
-));
-
-
 app.use(
   cors({
-    origin: [
-      "http://localhost:3000", // React dev
-      "http://frontend:3000",  // Docker service name (if in same docker-compose)
-    ],
+    origin: "http://localhost:3000", // React dev frontend
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
   })
 );
+
 
 app.use(compression());
 app.use(cookieParser());
