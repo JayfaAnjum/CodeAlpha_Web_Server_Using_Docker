@@ -25,7 +25,7 @@ Welcome to the eCommerce Platform Project built using the MERN (MongoDB, Express
 
 ### Env Variables
 
-1. Rename the `.env.example` file to `.env` and add the following environment variables:
+1. create .env file it is mandatory
 
 ```dotenv
 NODE_ENV=development
