@@ -4,24 +4,38 @@ import jwt from 'jsonwebtoken';
 // Middleware to protect routes by verifying JWT authentication token.
 const protect = async (req, res, next) => {
   try {
-    const token = req.cookies.jwt;
+    let token;
+
+    // Check cookie first
+    if (req.cookies && req.cookies.jwt) {
+      token = req.cookies.jwt;
+    }
+    // Optional: check Authorization header
+    else if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+      token = req.headers.authorization.split(' ')[1];
+    }
 
     if (!token) {
-      res.statusCode = 401;
-      throw new Error('Authentication failed: Token not provided.');
+      return res.status(401).json({ message: 'Authentication failed: Token not provided.' });
     }
 
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
 
     if (!decodedToken) {
-      res.statusCode = 401;
-      throw new Error('Authentication failed: Invalid token.');
+      return res.status(401).json({ message: 'Authentication failed: Invalid token.' });
     }
 
     req.user = await User.findById(decodedToken.userId).select('-password');
 
+    if (!req.user) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
     next();
   } catch (error) {
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({ message: 'Authentication failed: Token expired.' });
+    }
     next(error);
   }
 };
@@ -30,8 +44,7 @@ const protect = async (req, res, next) => {
 const admin = (req, res, next) => {
   try {
     if (!req.user || !req.user.isAdmin) {
-      res.statusCode = 401;
-      throw new Error('Authorization failed: Not authorized as an admin.');
+      return res.status(403).json({ message: 'Authorization failed: Not authorized as an admin.' });
     }
     next();
   } catch (error) {
